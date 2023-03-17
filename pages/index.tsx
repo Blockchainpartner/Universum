@@ -1,6 +1,8 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { ButtonSendTransaction } from '../components/ButtonSendTransaction'
+
 
 const Home: NextPage = () => {
   return (
@@ -29,6 +31,8 @@ const Home: NextPage = () => {
             <h2>RainbowKit Examples &rarr;</h2>
             <p>Discover boilerplate example RainbowKit projects.</p>
           </a>
+
+          <ButtonSendTransaction/>
 
         </div>
       </main>

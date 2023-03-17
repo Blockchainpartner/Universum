@@ -1,4 +1,6 @@
 const ethSigUtil = require('eth-sig-util');
+import { signTypedData } from '@wagmi/core'
+
 
 const EIP712Domain = [
   { name: 'name', type: 'string' },
@@ -32,7 +34,7 @@ function getMetaTxTypeData(chainId, verifyingContract) {
   }
 };
 
-async function signTypedData(signer, from, data) {
+async function signTypedData2(signer, from, data) {
   // If signer is a private key, use it to sign
   if (typeof(signer) === 'string') {
     const privateKey = Buffer.from(signer.replace(/^0x/, ''), 'hex');
@@ -42,33 +44,40 @@ async function signTypedData(signer, from, data) {
   // Otherwise, send the signTypedData RPC call
   // Note that hardhatvm and metamask require different EIP712 input
   const isHardhat = data.domain.chainId == 31337;
+  
   const [method, argData] = isHardhat
     ? ['eth_signTypedData', data]
     : ['eth_signTypedData_v4', JSON.stringify(data)]
-  return await signer.send(method, [from, argData]);
+    console.log("method :", method);
+    console.log("argData", argData);
+    console.log("data :", data);
+  //return await signer.send(method, [from, argData]);
+  const signature = await signTypedData({
+    domain: data.domain, 
+    types: data.types,
+    value: data.message,
+  });
+  console.log("signature :", signature);
+  return signature;
 }
 
 async function buildRequest(forwarder, input) {
   const nonce = await forwarder.getNonce(input.from).then(nonce => nonce.toString());
+  console.log("nonce: ", nonce);
   return { value: 0, gas: 1e6, nonce, ...input };
 }
 
 async function buildTypedData(forwarder, request) {
   const chainId = await forwarder.provider.getNetwork().then(n => n.chainId);
+  console.log("chainId :", chainId)
   const typeData = getMetaTxTypeData(chainId, forwarder.address);
   return { ...typeData, message: request };
 }
 
-async function signMetaTxRequest(signer, forwarder, input) {
+export async function signMetaTxRequest(signer, forwarder, input) {
   const request = await buildRequest(forwarder, input);
   const toSign = await buildTypedData(forwarder, request);
-  const signature = await signTypedData(signer, input.from, toSign);
+  const signature = await signTypedData2(signer, input.from, toSign);
 
   return { signature, request };
 }
-
-module.exports = { 
-  signMetaTxRequest,
-  buildRequest,
-  buildTypedData,
-};
