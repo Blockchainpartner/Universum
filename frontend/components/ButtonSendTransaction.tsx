@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { sendMetaTx2 } from "../service/metaTx"
 
 
-export function ButtonSendTransaction() {
+const ButtonSendTransaction = () => {
     const [name, setName] = useState('');
 
     async function handleClick(name: string) {
@@ -19,5 +19,6 @@ export function ButtonSendTransaction() {
             <button onClick={() => handleClick(name)}>Lancer la metaTx</button>
         </div>
     )
-
 }
+
+export default ButtonSendTransaction;

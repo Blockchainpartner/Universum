@@ -1,12 +1,14 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+// import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { ButtonSendTransaction } from '../components/ButtonSendTransaction'
+import  ButtonSendTransaction from '../components/ButtonSendTransaction'
+import  RegistrationCard from '../components/RegistrationCard'
+
 
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className=''>
       <Head>
         <title>RainbowKit App</title>
         <meta
@@ -16,32 +18,15 @@ const Home: NextPage = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main>
-        <ConnectButton />
+      
 
-        <h1>
-          Welcome to <a href="">RainbowKit</a> + <a href="">wagmi</a> +{' '}
-          <a href="https://nextjs.org">Next.js!</a>
-        </h1>
 
-        <div>
-          <a
-            href="https://github.com/rainbow-me/rainbowkit/tree/main/examples"
-          >
-            <h2>RainbowKit Examples &rarr;</h2>
-            <p>Discover boilerplate example RainbowKit projects.</p>
-          </a>
 
-          <ButtonSendTransaction/>
+      {/* <ButtonSendTransaction/> */}
+      <RegistrationCard/>
 
-        </div>
-      </main>
-
-      <footer>
-        <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
-          Made with ❤️ by your frens at 🌈
-        </a>
-      </footer>
+        
+      
     </div>
   );
 };
