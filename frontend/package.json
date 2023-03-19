@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.12.1",
+    "eth-ens-namehash": "^2.0.8",
     "eth-sig-util": "^3.0.1",
     "ethers": "^5.0.0",
     "next": "^12.1.6",
