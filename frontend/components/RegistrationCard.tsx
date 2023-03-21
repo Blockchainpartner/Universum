@@ -1,22 +1,29 @@
-import React from 'react'
-import ButtonSendTransaction from './ButtonSendTransaction';
+import React from "react";
+import ButtonSendTransaction from "./ButtonSendTransaction";
 
 const RegistrationCard = () => {
-    return (
-
-        <div className='flex justify-center items-center pt-20'>
-
-            <div className='flex flex-col w-2/5 h-96  bg-white/70 rounded-lg items-center justify-center border-neutral-800 border m-10 pb-10'>
-                <h1 className='p-4 font-bold text-lg'>Check availability name</h1>
-                <ButtonSendTransaction />
-            </div>
-
-            <div className='flex flex-col w-2/5 h-96 items-center justify-center m-10 pb-10'>
-                <h1 className='text-lg font-bold'>Buy your universal name</h1>
-                <p className='p-4'>Register now your universal name on every layer 2's currently available. No more different identity. Welcome to a cross-chain world. </p>
-            </div>
+  return (
+    <div className="flex justify-center items-center pt-font-bold text-lg">
+      <div className="container h-96 w-96 bg-white bg-opacity-10 rounded-2xl shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm">
+        <div className="h-full flex flex-col justify-evenly items-center">
+          <h1 className="text-white font-poppins text-2xl tracking-widest">
+            Check name availability
+          </h1>
+          <ButtonSendTransaction />
         </div>
-    )
-}
+      </div>
+
+      <div className="flex flex-col w-2/5 h-96 items-center justify-center m-10 pb-10">
+        <h1 className="text-lg text-white font-bold">
+          Buy your universal name
+        </h1>
+        <p className="p-4 text-white">
+          Register now your universal name on every layer 2's currently
+          available. No more different identity. Welcome to a cross-chain world.{" "}
+        </p>
+      </div>
+    </div>
+  );
+};
 
 export default RegistrationCard;
