@@ -2,8 +2,8 @@ import { ethers, utils } from 'ethers';
 import { createInstanceForwarder } from './forwarder';
 import { createInstanceRegistrar } from './registrar';
 import { signMetaTxRequest } from './signer';
-import { getProvider, getAccount } from '@wagmi/core'
-import { OPTIMISTIC_GOERLI_MINIMAL_FORWARDER, ARBITRUM_GOERLI_MINIMAL_FORWARDER, SCROLL_MINIMAL_FORWARDER, POLYGONZK_MINIMAL_FORWARDER } from './contractAddresses';
+import { getProvider, getAccount, getNetwork, switchNetwork } from '@wagmi/core'
+import { OPTIMISTIC_GOERLI_MINIMAL_FORWARDER, ARBITRUM_GOERLI_MINIMAL_FORWARDER, SCROLL_MINIMAL_FORWARDER, POLYGONZK_MINIMAL_FORWARDER, OPTIMISTIC_GOERLI_REGISTRAR_ADDRESS, ARBITRUM_GOERLI_REGISTRAR_ADDRESS, SCROLL_REGISTRAR_ADDRESS, POLYGON_REGISTRAR_ADDRESS, POLYGONZK_REGISTRAR_ADDRESS } from './contractAddresses';
 
 
 const labelhash = (label) => utils.keccak256(utils.toUtf8Bytes(label))
@@ -45,8 +45,8 @@ export async function registerName(registry, provider, name) {
   else return sendMetaTx(registry, provider, signer, name);
 }
 
-function getContractAddress(network) {
-  switch (network.name) {
+function getContractAddressForwarder(chain) {
+  switch (chain.network) {
     case "optimism-goerli":
       return OPTIMISTIC_GOERLI_MINIMAL_FORWARDER;
       break;
@@ -58,6 +58,26 @@ function getContractAddress(network) {
       break;
     case "polygon-zkevm-testnet":
       return POLYGONZK_MINIMAL_FORWARDER;
+      break;
+    default:
+      // code block
+      return "";
+  }
+};
+
+function getContractAddressRegistrar(chain) {
+  switch (chain.network) {
+    case "optimism-goerli":
+      return OPTIMISTIC_GOERLI_REGISTRAR_ADDRESS;
+      break;
+    case "arbitrum-goerli":
+      return ARBITRUM_GOERLI_REGISTRAR_ADDRESS;
+      break;
+    case "scroll-testnet":
+      return SCROLL_REGISTRAR_ADDRESS;
+      break;
+    case "polygon-zkevm-testnet":
+      return POLYGONZK_REGISTRAR_ADDRESS;
       break;
     default:
       // code block
@@ -80,9 +100,9 @@ export async function sendMetaTx2(name, owner) {
   if (!url) throw new Error(`Missing relayer url`);
 
   const signer = ethersProvider.getSigner();
-  const registrar = createInstanceRegistrar(ethersProvider)
+  const registrar = createInstanceRegistrar(ethersProvider, getContractAddressRegistrar(userNetwork))
 
-  const forwarder = createInstanceForwarder(ethersProvider, getContractAddress(userNetwork)); //rajouter un paramètre pour l'adresse du forwarder ici - switch
+  const forwarder = createInstanceForwarder(ethersProvider, getContractAddressForwarder(userNetwork)); //rajouter un paramètre pour l'adresse du forwarder ici - switch
   console.log("forwarder :", forwarder);
   const account = getAccount()
   const from = account.address;
@@ -99,4 +119,45 @@ export async function sendMetaTx2(name, owner) {
     body: JSON.stringify(request),
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+// Chains is a tab of wagmi chains
+export async function sendMetaTxOnAllNetworks(name, chains) {
+  let requestArray = [];
+
+  const account = getAccount()
+  const from = account.address;
+  console.log("from: ", from);
+
+  for (let i = 0; i < chains.length; i++) {
+
+    console.log("chains(i) = ", chains[i]);
+
+    const { chain } = getNetwork();
+    
+    if (chain != chains[i]) {
+      let network = await switchNetwork({
+        chainId: chains[i].id,
+      })
+    }
+
+    let provider = getProvider();
+
+    let signer = provider.getSigner();
+
+    let forwarder = createInstanceForwarder(provider, getContractAddressForwarder(chains[i]));
+    let registrar = createInstanceRegistrar(provider, getContractAddressRegistrar(chains[i]));
+    let data = registrar.interface.encodeFunctionData('register', [labelhash(name), from]);
+    let to = registrar.address;
+    let request = await signMetaTxRequest(signer.provider, forwarder, { to, from, data });
+    requestArray.push(JSON.stringify(request));
+  }
+
+  // Just send the request array to the relayer to process it
+
+  // return fetch(url, {
+  //   method: 'POST',
+  //   body: JSON.stringify(request),
+  //   headers: { 'Content-Type': 'application/json' },
+  // });
 }

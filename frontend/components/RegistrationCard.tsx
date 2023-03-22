@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { sendMetaTx2 } from "../service/metaTx";
+import { sendMetaTx2, sendMetaTxOnAllNetworks } from "../service/metaTx";
 import { useContractRead, useNetwork } from "wagmi";
 import useDebounce from "./useDebounce";
 import Image from "next/image";
 import polygon from "../assets/polygon.png";
-import optimism from "../assets/optimism.png";
+import optimism_logo from "../assets/optimism_logo.png";
 import scroll from "../assets/scroll.png";
 import zksync from "../assets/zksync.png";
 import { getContractAddress } from "../utils/utils";
+import {
+  arbitrum,
+  goerli,
+  mainnet,
+  optimism,
+  arbitrumGoerli,
+  optimismGoerli,
+  zkSyncTestnet,
+} from "wagmi/chains";
+import { scrollTestnet, polygonZkTestnet } from "../utils/utils"
 
 const namehash = require("eth-ens-namehash");
 
@@ -28,7 +38,8 @@ const RegistrationCard = () => {
   });
 
   async function handleClick(name: string) {
-    sendMetaTx2(name);
+    //sendMetaTx2(name);
+    sendMetaTxOnAllNetworks(name, [optimismGoerli, arbitrumGoerli, scrollTestnet, polygonZkTestnet]);
   }
 
   async function handleVerify() {
@@ -84,7 +95,7 @@ const RegistrationCard = () => {
               </h1>
               <div className=" w-max flex flex-row content-between">
                 <div className="ml-10 mr-4">
-                  <Image src={optimism} alt="optimism" width={40} height={40} />
+                  <Image src={optimism_logo} alt="optimism" width={40} height={40} />
                 </div>
                 <div className=" mr-4">
                   <Image src={polygon} alt="polygon" width={40} height={40} />
