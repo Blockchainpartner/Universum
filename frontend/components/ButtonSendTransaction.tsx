@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { sendMetaTx2 } from "../service/metaTx";
 import { useContractRead, useNetwork } from "wagmi";
@@ -16,6 +17,7 @@ import {
 const namehash = require("eth-ens-namehash");
 
 let ensABI = require("../service/ensABI.js");
+
 
 const ButtonSendTransaction = () => {
   const [name, setName] = useState("");
@@ -48,6 +50,7 @@ const ButtonSendTransaction = () => {
     functionName: "owner",
     args: [namehash.hash(name + ".test")],
   });
+
 
   async function handleClick(name: string) {
     sendMetaTx2(name);
@@ -121,5 +124,6 @@ const ButtonSendTransaction = () => {
     </div>
   );
 };
+
 
 export default ButtonSendTransaction;

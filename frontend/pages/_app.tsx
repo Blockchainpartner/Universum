@@ -55,6 +55,7 @@ export const polygonZkTestnet: Chain = {
       name: "Polygon ZkEVM Explorer",
       url: " https://testnet-zkevm.polygonscan.com",
     },
+
   },
 };
 
@@ -67,9 +68,11 @@ const { chains, provider, webSocketProvider } = configureChains(
     arbitrumGoerli,
     optimismGoerli,
     zkSyncTestnet,
+
     scrollTestnet,
     polygonZkTestnet,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
+
   ],
   [publicProvider()]
 );
@@ -91,7 +94,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={midnightTheme()}>
         <Layout>
-          <Component {...pageProps} />
+        <Component {...pageProps} />
         </Layout>
       </RainbowKitProvider>
     </WagmiConfig>
