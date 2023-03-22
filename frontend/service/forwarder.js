@@ -140,8 +140,9 @@ const abi = [
 ];
 
 //const address = process.env.NEXT_PUBLIC_FORWARDER_CONTRACT_ADDRESS
-const address = "0x14Bb076173d9887fd1b548a3081264ED689B54cF"
+//const address = "0x14Bb076173d9887fd1b548a3081264ED689B54cF"
+// a changer
 
-export function createInstanceForwarder(provider) {
+export function createInstanceForwarder(provider, address) {
   return new ethers.Contract(address, abi, provider);
 }
