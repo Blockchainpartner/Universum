@@ -1,6 +1,6 @@
 pragma solidity >=0.8.4;
 
-import "@openzeppelin/contracts/ownership/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ENS.sol";
 
 
