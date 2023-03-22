@@ -62,6 +62,7 @@ async function signTypedData2(signer, from, data) {
 }
 
 async function buildRequest(forwarder, input) {
+  console.log("je rentre dans la récupération du nonce: ");
   const nonce = await forwarder.getNonce(input.from).then(nonce => nonce.toString());
   console.log("nonce: ", nonce);
   return { value: 0, gas: 1e6, nonce, ...input };
@@ -75,6 +76,7 @@ async function buildTypedData(forwarder, request) {
 }
 
 export async function signMetaTxRequest(signer, forwarder, input) {
+  console.log("input : ", input);
   const request = await buildRequest(forwarder, input);
   const toSign = await buildTypedData(forwarder, request);
   const signature = await signTypedData2(signer, input.from, toSign);
