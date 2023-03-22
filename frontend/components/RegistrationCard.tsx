@@ -18,6 +18,8 @@ import {
   zkSyncTestnet,
 } from "wagmi/chains";
 import { scrollTestnet, polygonZkTestnet } from "../utils/utils"
+import { getAccount } from '@wagmi/core'
+
 
 const namehash = require("eth-ens-namehash");
 
@@ -26,9 +28,11 @@ let ensABI = require("../service/ensABI.js");
 const RegistrationCard = () => {
   const [name, setName] = useState("");
   const debouncedName = useDebounce(name, 500);
-  const [isFree, setIsFree] = useState(true);
+  const [isFree, setIsFree] = useState(false);
   const [isTaken, setIsTaken] = useState(false);
+  const [modalConnectWallet, setModalConnectWallet] = useState(false);
   const { chain } = useNetwork();
+  const account = getAccount();
 
   const { refetch } = useContractRead({
     address: getContractAddress(chain),
@@ -43,15 +47,20 @@ const RegistrationCard = () => {
   }
 
   async function handleVerify() {
-    setIsFree(false);
-    setIsTaken(false);
-    const res = await refetch();
-    const stringRes = res.data?.toString();
-    console.log("resultat de l'appel: ", stringRes);
-    if (stringRes == "0x0000000000000000000000000000000000000000") {
-      setIsFree(true);
-    } else {
-      setIsTaken(true);
+    if (!account.isConnected) {
+      setModalConnectWallet(true);
+    }
+    else if (account.isConnected) {
+      setIsFree(false);
+      setIsTaken(false);
+      const res = await refetch();
+      const stringRes = res.data?.toString();
+      console.log("resultat de l'appel: ", stringRes);
+      if (stringRes == "0x0000000000000000000000000000000000000000") {
+        setIsFree(true);
+      } else {
+        setIsTaken(true);
+      }
     }
   }
 
@@ -61,7 +70,7 @@ const RegistrationCard = () => {
         <h1 className="text-white font-poppins text-2xl tracking-widest">
           Check name availability
         </h1>
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <div className="flex flex-row">
             <input
               className="bg-transparent border border-t-0 border-l-0 border-r-0 focus:outline-none text-white tracking-wide"
@@ -73,6 +82,7 @@ const RegistrationCard = () => {
               .uni
             </p>
           </div>
+          {modalConnectWallet && (<p className="mt-4 font-semibold text-transparent bg-clip-text bg-gradient-to-br from-violet-700 to-blue-300"> Please connect your wallet </p>)}
           <button
             className=" cursor-pointer font-poppins rounded-full w-40  px-5 py-1 mt-6 bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-80 "
             onClick={() => handleVerify()}
