@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { sendMetaTx2 } from "../service/metaTx";
-import { useContractRead } from "wagmi";
+import { useContractRead, useNetwork } from "wagmi";
 import useDebounce from "./useDebounce";
 import Image from "next/image";
 import polygon from "../assets/polygon.png";
 import optimism from "../assets/optimism.png";
 import scroll from "../assets/scroll.png";
 import zksync from "../assets/zksync.png";
-
+import {
+  OPTIMISTIC_GOERLI_ENS_ADDRESS,
+  ARBITRUM_GOERLI_ENS_ADDRESS,
+  SCROLL_ENS_ADDRESS,
+  POLYGONZK_ENS_ADDRESS,
+} from "../service/contractAddresses";
 const namehash = require("eth-ens-namehash");
 
 let ensABI = require("../service/ensABI.js");
@@ -17,9 +22,28 @@ const ButtonSendTransaction = () => {
   const debouncedName = useDebounce(name, 500);
   const [isFree, setIsFree] = useState(true);
   const [isTaken, setIsTaken] = useState(false);
+  const { chain } = useNetwork();
 
+  function getContractAddress() {
+    switch (chain?.network) {
+      case "optimism-goerli":
+        return OPTIMISTIC_GOERLI_ENS_ADDRESS;
+        break;
+      case "arbitrum-goerli":
+        return ARBITRUM_GOERLI_ENS_ADDRESS;
+        break;
+      case "scroll-testnet":
+        return SCROLL_ENS_ADDRESS;
+        break;
+      case "polygon-zkevm-testnet":
+        return POLYGONZK_ENS_ADDRESS;
+        break;
+      default:
+      // code block
+    }
+  }
   const { refetch } = useContractRead({
-    address: "0x9EBEe49a631f179f927B721d526080c100A82C4D",
+    address: getContractAddress(),
     abi: ensABI,
     functionName: "owner",
     args: [namehash.hash(name + ".test")],
