@@ -20,20 +20,16 @@ import { scrollTestnet, polygonZkTestnet } from "../utils/utils"
 import { publicProvider } from "wagmi/providers/public";
 import Layout from "../components/Layout";
 
+// When going live / demo, let only networks where contracts were deployed
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    mainnet,
-    goerli,
+    optimismGoerli,
     optimism,
     arbitrum,
     arbitrumGoerli,
-    optimismGoerli,
     zkSyncTestnet,
-
     scrollTestnet,
     polygonZkTestnet,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
-
   ],
   [publicProvider()]
 );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendMetaTx2, sendMetaTxOnAllNetworks } from "../service/metaTx";
-import { useContractRead, useNetwork } from "wagmi";
+import { useContractRead, useNetwork, useAccount } from "wagmi";
 import useDebounce from "./useDebounce";
 import Image from "next/image";
 import polygon from "../assets/polygon.png";
@@ -18,8 +18,6 @@ import {
   zkSyncTestnet,
 } from "wagmi/chains";
 import { scrollTestnet, polygonZkTestnet } from "../utils/utils"
-import { getAccount } from '@wagmi/core'
-
 
 const namehash = require("eth-ens-namehash");
 
@@ -30,9 +28,8 @@ const RegistrationCard = () => {
   const debouncedName = useDebounce(name, 500);
   const [isFree, setIsFree] = useState(false);
   const [isTaken, setIsTaken] = useState(false);
-  const [modalConnectWallet, setModalConnectWallet] = useState(false);
   const { chain } = useNetwork();
-  const account = getAccount();
+  const { address, isConnecting, isDisconnected } = useAccount()
 
   const { refetch } = useContractRead({
     address: getContractAddress(chain),
@@ -47,12 +44,9 @@ const RegistrationCard = () => {
   }
 
   async function handleVerify() {
-    if (!account.isConnected) {
-      setModalConnectWallet(true);
-    }
-    else if (account.isConnected) {
-      setIsFree(false);
-      setIsTaken(false);
+    setIsFree(false);
+    setIsTaken(false);
+    if (name) {
       const res = await refetch();
       const stringRes = res.data?.toString();
       console.log("resultat de l'appel: ", stringRes);
@@ -62,6 +56,7 @@ const RegistrationCard = () => {
         setIsTaken(true);
       }
     }
+
   }
 
   return (
@@ -82,9 +77,10 @@ const RegistrationCard = () => {
               .uni
             </p>
           </div>
-          {modalConnectWallet && (<p className="mt-4 font-semibold text-transparent bg-clip-text bg-gradient-to-br from-violet-700 to-blue-300"> Please connect your wallet </p>)}
+          {isDisconnected && (<p className="mt-4 font-semibold text-transparent bg-clip-text bg-gradient-to-br from-violet-700 to-blue-300"> Please connect your wallet </p>)}
           <button
-            className=" cursor-pointer font-poppins rounded-full w-40  px-5 py-1 mt-6 bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-80 "
+            className=" cursor-pointer font-poppins rounded-full w-40  px-5 py-1 mt-6 bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-80 disabled:cursor-not-allowed"
+            disabled={isDisconnected}
             onClick={() => handleVerify()}
           >
             Search
