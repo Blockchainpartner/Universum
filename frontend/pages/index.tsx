@@ -10,6 +10,10 @@ const Home: NextPage = () => {
         <title>Universum</title>
         <meta content="Universum app" name="Universum" />
         <link href="/favicon.ico" rel="icon" />
+        <link
+          href="https://fonts.googleapis.com/css?family=Poppins"
+          rel="stylesheet"
+        ></link>
       </Head>
 
       <RegistrationCard />

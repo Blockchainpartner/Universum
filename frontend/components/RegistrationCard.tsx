@@ -3,8 +3,8 @@ import ButtonSendTransaction from "./ButtonSendTransaction";
 
 const RegistrationCard = () => {
   return (
-    <div className="flex justify-center items-center pt-font-bold text-lg">
-      <div className="container h-96 w-96 bg-white bg-opacity-10 rounded-2xl shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm">
+    <div className="flex justify-center items-center mt-20 text-lg">
+      <div className="container h-96 w-96 bg-white bg-opacity-10 rounded-2xl shadow-2xl relative z-2 border border-opacity-20 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm">
         <div className="h-full flex flex-col justify-evenly items-center">
           <h1 className="text-white font-poppins text-2xl tracking-widest">
             Check name availability

@@ -13,10 +13,15 @@ const Layout = ({ children }: PropsWithChildren) => {
       </div>
 
       {children}
-
-      <div className=" -translate-y-1/2  flex justify-end  ">
-        <div className={"animate__animated animate__zoomIn"}>
-          <Image src={headerImg} alt="Header Img" width={300} height={300} />
+      <div className="-translate-y-1/3">
+        <div className={"  flex justify-end animate-waving-hand   "}>
+          <Image
+            className={""}
+            src={headerImg}
+            alt="Header Img"
+            width={300}
+            height={300}
+          />
         </div>
       </div>
       <p className="absolute bottom-0 text-center text-white w-full">

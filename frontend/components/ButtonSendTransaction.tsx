@@ -1,75 +1,101 @@
-import React, { useState } from 'react'
-import { sendMetaTx2 } from "../service/metaTx"
-import { useContractRead } from 'wagmi'
-import useDebounce from './useDebounce'
-const namehash = require('eth-ens-namehash');
-let ensABI = require('../service/ensABI.js');
+import React, { useState } from "react";
+import { sendMetaTx2 } from "../service/metaTx";
+import { useContractRead } from "wagmi";
+import useDebounce from "./useDebounce";
+import Image from "next/image";
+import polygon from "../assets/polygon.png";
+import optimism from "../assets/optimism.png";
+import scroll from "../assets/scroll.png";
+import zksync from "../assets/zksync.png";
 
+const namehash = require("eth-ens-namehash");
 
+let ensABI = require("../service/ensABI.js");
 
 const ButtonSendTransaction = () => {
-    const [name, setName] = useState('');
-    const debouncedName = useDebounce(name, 500);
-    const [isFree, setIsFree] = useState(false);
-    const [isTaken, setIsTaken] = useState(false);
+  const [name, setName] = useState("");
+  const debouncedName = useDebounce(name, 500);
+  const [isFree, setIsFree] = useState(true);
+  const [isTaken, setIsTaken] = useState(false);
 
-    const { refetch } = useContractRead(
-        {
-            address: '0x9EBEe49a631f179f927B721d526080c100A82C4D',
-            abi: ensABI,
-            functionName: 'owner',
-            args: [namehash.hash(name + ".test")],
-        }
-    );
+  const { refetch } = useContractRead({
+    address: "0x9EBEe49a631f179f927B721d526080c100A82C4D",
+    abi: ensABI,
+    functionName: "owner",
+    args: [namehash.hash(name + ".test")],
+  });
 
-    async function handleClick(name: string) {
-        sendMetaTx2(name);
-    };
+  async function handleClick(name: string) {
+    sendMetaTx2(name);
+  }
 
-    async function handleVerify() {
-        setIsFree(false);
-        setIsTaken(false);
-        const res = await refetch();
-        const stringRes = res.data?.toString();
-        console.log("resultat de l'appel: ", stringRes);
-        if (stringRes == "0x0000000000000000000000000000000000000000") {
-            setIsFree(true);
-        }
-        else {
-            setIsTaken(true);
-        }
-    };
+  async function handleVerify() {
+    setIsFree(false);
+    setIsTaken(false);
+    const res = await refetch();
+    const stringRes = res.data?.toString();
+    console.log("resultat de l'appel: ", stringRes);
+    if (stringRes == "0x0000000000000000000000000000000000000000") {
+      setIsFree(true);
+    } else {
+      setIsTaken(true);
+    }
+  }
 
-    return (
-        <div className='flex flex-col'>
-            <div className='flex flex-row'>
-                <input
-                    className='border rounded p-2'
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Search name"
-                    value={name}>
-                </input>
-                <p className='flex justify-center items-center'>.uni</p>
-                <button
-                    className='border rounded p-2 ml-4'
-                    onClick={() => handleVerify()}
-                >Search</button>
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-row">
+        <input
+          className="bg-transparent border border-t-0 border-l-0 border-r-0 focus:outline-none text-white tracking-wide"
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Search name"
+          value={name}
+        ></input>
+        <p className="text-white mx-3  translate-y-1/4 text-2xl font-semibold">
+          .uni
+        </p>
+      </div>
+      <button
+        className="cursor-pointer font-poppins rounded-full px-5 py-1 mt-6 bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-80 "
+        onClick={() => handleVerify()}
+      >
+        Search
+      </button>
+      {isFree && (
+        <>
+          <p className="text-green-500 font-poppins text-center p-2">
+            The name is available
+          </p>
+          <button
+            className="cursor-pointer font-poppins rounded-full px-5 py-1 mt-6 bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-80"
+            onClick={() => handleClick(name)}
+          >
+            Register it on all L2's
+          </button>
+          <h1 className="p-4 text-white font-bold font-poppins text-lg text-center">
+            Supported networks
+          </h1>
+          <div className=" w-max flex flex-row content-between">
+            <div className="ml-10 mr-4">
+              <Image src={optimism} alt="optimism" width={40} height={40} />
             </div>
-            {isFree && (
-                <>
-                    <p className='text-green-500 p-2'>The name is available</p>
-                    <button
-                        className='border rounded p-2'
-                        onClick={() => handleClick(name)}>Register it on all L2's
-                    </button>
-                    <h1 className='p-4 font-bold text-lg text-center'>Supported networks</h1>
-                </>
-            )}
-            {isTaken && (
-                <p className='text-red-500 p-2'>The name is already registered</p>
-            )}
-        </div>
-    )
-}
+            <div className=" mr-4">
+              <Image src={polygon} alt="polygon" width={40} height={40} />
+            </div>
+            <div className=" mr-4">
+              <Image src={scroll} alt="scroll" width={40} height={40} />
+            </div>
+            <div>
+              <Image src={zksync} alt="zksync" width={40} height={40} />
+            </div>
+          </div>
+        </>
+      )}
+      {isTaken && (
+        <p className="text-red-500 p-2">The name is already registered</p>
+      )}
+    </div>
+  );
+};
 
 export default ButtonSendTransaction;
