@@ -1,11 +1,25 @@
-import '@rainbow-me/rainbowkit/styles.css';
-import '../styles/globals.css';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import type { AppProps } from 'next/app';
-import { configureChains, createClient, WagmiConfig, Chain } from 'wagmi';
-import { arbitrum, goerli, mainnet, optimism, arbitrumGoerli, optimismGoerli, zkSyncTestnet } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-import Layout from '../components/Layout'
+import "@rainbow-me/rainbowkit/styles.css";
+import "../styles/globals.css";
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  midnightTheme,
+} from "@rainbow-me/rainbowkit";
+import type { AppProps } from "next/app";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import {
+  arbitrum,
+  goerli,
+  mainnet,
+  optimism,
+  polygon,
+  arbitrumGoerli,
+  optimismGoerli,
+  zkSyncTestnet,
+} from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
+import Layout from "../components/Layout";
+
 
 export const scrollTestnet:Chain = {
   id: 534353,
@@ -52,6 +66,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     arbitrumGoerli,
     optimismGoerli,
     zkSyncTestnet,
+
     scrollTestnet,
     polygonZkTestnet,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
@@ -60,7 +75,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'RainbowKit App',
+  appName: "Universum",
   chains,
 });
 
@@ -74,7 +89,7 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider chains={chains} theme={midnightTheme()}>
         <Layout>
         <Component {...pageProps} />
         </Layout>
