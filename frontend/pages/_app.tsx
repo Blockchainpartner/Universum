@@ -16,7 +16,7 @@ import {
   optimismGoerli,
   zkSyncTestnet,
 } from "wagmi/chains";
-import { scrollTestnet, polygonZkTestnet } from "../utils/utils"
+import { scrollTestnet, polygonZkTestnet } from "../utils/constants";
 import { publicProvider } from "wagmi/providers/public";
 import Layout from "../components/Layout";
 
@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={midnightTheme()}>
         <Layout>
-        <Component {...pageProps} />
+          <Component {...pageProps} />
         </Layout>
       </RainbowKitProvider>
     </WagmiConfig>

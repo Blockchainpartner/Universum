@@ -3,64 +3,66 @@ import {
   ARBITRUM_GOERLI_ENS_ADDRESS,
   SCROLL_ENS_ADDRESS,
   POLYGONZK_ENS_ADDRESS,
-} from "../service/contractAddresses";
-import { Chain } from "wagmi";
+  OPTIMISTIC_GOERLI_MINIMAL_FORWARDER,
+  ARBITRUM_GOERLI_MINIMAL_FORWARDER,
+  SCROLL_MINIMAL_FORWARDER,
+  POLYGONZK_MINIMAL_FORWARDER,
+  OPTIMISTIC_GOERLI_REGISTRAR_ADDRESS,
+  ARBITRUM_GOERLI_REGISTRAR_ADDRESS,
+  SCROLL_REGISTRAR_ADDRESS,
+  POLYGONZK_REGISTRAR_ADDRESS,
+} from "./contractAddresses";
 
-export function getContractAddress(chain: any) {
+export const getContractAddress = (chain: any) => {
   switch (chain?.network) {
     case "optimism-goerli":
       return OPTIMISTIC_GOERLI_ENS_ADDRESS;
-      break;
     case "arbitrum-goerli":
       return ARBITRUM_GOERLI_ENS_ADDRESS;
-      break;
     case "scroll-testnet":
       return SCROLL_ENS_ADDRESS;
-      break;
     case "polygon-zkevm-testnet":
       return POLYGONZK_ENS_ADDRESS;
+    default:
+      break;
+  }
+};
+export const getContractAddressForwarder = (chain: any) => {
+  switch (chain.network) {
+    case "optimism-goerli":
+      return OPTIMISTIC_GOERLI_MINIMAL_FORWARDER;
+      break;
+    case "arbitrum-goerli":
+      return ARBITRUM_GOERLI_MINIMAL_FORWARDER;
+      break;
+    case "scroll-testnet":
+      return SCROLL_MINIMAL_FORWARDER;
+      break;
+    case "polygon-zkevm-testnet":
+      return POLYGONZK_MINIMAL_FORWARDER;
       break;
     default:
-    // code block
+      // code block
+      return "";
   }
-}
+};
 
-export const scrollTestnet: Chain = {
-    id: 534353,
-    name: "Scroll Testnet",
-    network: "scroll-testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "Ether",
-      symbol: "ETH",
-    },
-    rpcUrls: {
-      public: { http: ["https://alpha-rpc.scroll.io/l2"] },
-      default: { http: ["https://alpha-rpc.scroll.io/l2"] },
-    },
-    blockExplorers: {
-      default: { name: "ScrollExplorer", url: "https://blockscout.scroll.io" },
-    },
-  };
-  
-  export const polygonZkTestnet: Chain = {
-    id: 1442,
-    name: "Polygon ZkEVM Testnet",
-    network: "polygon-zkevm-testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "Ether",
-      symbol: "ETH",
-    },
-    rpcUrls: {
-      public: { http: ["https://rpc.public.zkevm-test.net"] },
-      default: { http: ["https://rpc.public.zkevm-test.net"] },
-    },
-    blockExplorers: {
-      default: {
-        name: "Polygon ZkEVM Explorer",
-        url: " https://testnet-zkevm.polygonscan.com",
-      },
-  
-    },
-  };
+export const getContractAddressRegistrar = (chain: any) => {
+  switch (chain.network) {
+    case "optimism-goerli":
+      return OPTIMISTIC_GOERLI_REGISTRAR_ADDRESS;
+      break;
+    case "arbitrum-goerli":
+      return ARBITRUM_GOERLI_REGISTRAR_ADDRESS;
+      break;
+    case "scroll-testnet":
+      return SCROLL_REGISTRAR_ADDRESS;
+      break;
+    case "polygon-zkevm-testnet":
+      return POLYGONZK_REGISTRAR_ADDRESS;
+      break;
+    default:
+      // code block
+      return "";
+  }
+};
