@@ -51,7 +51,10 @@ contract MyNewRegistrar is Ownable{
         else if (msg.value == 0) {
             revert InsufficientValue(msg.value);
         }
-        ens.setSubnodeOwner(rootNode, label, owner);
+        else {
+            ens.setSubnodeOwner(rootNode, label, owner);
+        }
+        
     }
 
     /**
