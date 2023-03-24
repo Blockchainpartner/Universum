@@ -1,59 +1,109 @@
 export const ensABI = [
   {
+    anonymous: false,
     inputs: [
       {
-        internalType: "contract ENS",
-        name: "ensAddr",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
-        name: "node",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "InsufficientValue",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
+        indexed: true,
         internalType: "address",
         name: "owner",
         type: "address",
       },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "approved",
+        type: "bool",
+      },
     ],
-    name: "UnexpiredCommitmentExists",
-    type: "error",
+    name: "ApprovalForAll",
+    type: "event",
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "previousOwner",
-        type: "address",
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
       },
       {
         indexed: true,
+        internalType: "bytes32",
+        name: "label",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
         internalType: "address",
-        name: "newOwner",
+        name: "owner",
         type: "address",
       },
     ],
-    name: "OwnershipTransferred",
+    name: "NewOwner",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "resolver",
+        type: "address",
+      },
+    ],
+    name: "NewResolver",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "uint64",
+        name: "ttl",
+        type: "uint64",
+      },
+    ],
+    name: "NewTTL",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "Transfer",
     type: "event",
   },
   {
@@ -63,33 +113,31 @@ export const ensABI = [
         name: "owner",
         type: "address",
       },
-    ],
-    name: "commit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "operator",
         type: "address",
       },
     ],
-    name: "commitments",
+    name: "isApprovedForAll",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bool",
         name: "",
-        type: "uint256",
+        type: "bool",
       },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+    ],
     name: "owner",
     outputs: [
       {
@@ -105,23 +153,30 @@ export const ensABI = [
     inputs: [
       {
         internalType: "bytes32",
-        name: "label",
+        name: "node",
         type: "bytes32",
       },
+    ],
+    name: "recordExists",
+    outputs: [
       {
-        internalType: "address",
-        name: "owner",
-        type: "address",
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
-    name: "register",
-    outputs: [],
-    stateMutability: "payable",
+    stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
-    name: "relayer",
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+    ],
+    name: "resolver",
     outputs: [
       {
         internalType: "address",
@@ -133,8 +188,19 @@ export const ensABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "renounceOwnership",
+    inputs: [
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "approved",
+        type: "bool",
+      },
+    ],
+    name: "setApprovalForAll",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -142,12 +208,17 @@ export const ensABI = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
         internalType: "address",
-        name: "_relayer",
+        name: "owner",
         type: "address",
       },
     ],
-    name: "setRelayer",
+    name: "setOwner",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -155,14 +226,146 @@ export const ensABI = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
         internalType: "address",
-        name: "newOwner",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "resolver",
+        type: "address",
+      },
+      {
+        internalType: "uint64",
+        name: "ttl",
+        type: "uint64",
+      },
+    ],
+    name: "setRecord",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "resolver",
         type: "address",
       },
     ],
-    name: "transferOwnership",
+    name: "setResolver",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        internalType: "bytes32",
+        name: "label",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "setSubnodeOwner",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        internalType: "bytes32",
+        name: "label",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "resolver",
+        type: "address",
+      },
+      {
+        internalType: "uint64",
+        name: "ttl",
+        type: "uint64",
+      },
+    ],
+    name: "setSubnodeRecord",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint64",
+        name: "ttl",
+        type: "uint64",
+      },
+    ],
+    name: "setTTL",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
+      },
+    ],
+    name: "ttl",
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
 ];
