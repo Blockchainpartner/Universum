@@ -1,6 +1,6 @@
 from flask import Flask, make_response, jsonify
 from flask_cors import CORS
-from utils import get_request_parameters, build_and_send_transaction
+from utils import get_request_parameters,execute_register_transaction
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,12 +14,18 @@ def send():
     # Get the request data containing the transaction details
     parameters = get_request_parameters()
     # Get the transaction result
-    receipt = build_and_send_transaction(parameters)
+    label, address=parameters.values()
+    blockchains = ['GNOSIS', "SCROLL", "ARBITRUM", 'ZK_EVM']
+    receipts = []
+    for blockchain in blockchains:
+        print(blockchain)
+        receipt = execute_register_transaction(label,address,blockchain)
+        receipts.append(receipt.status)
     # Check the result
-    if receipt.status == 1:
+    if all([receipt == 1 for receipt in receipts ]) :
         return make_response(jsonify({'message': 'transaction sent!'}), 200)
     else:
-        return make_response(jsonify({'message': 'transaction sent'}), 500)
+        return make_response(jsonify({'message': 'transaction failed'}), 500)
 
 
 @app.errorhandler(500)
