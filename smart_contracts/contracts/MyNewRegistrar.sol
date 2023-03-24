@@ -3,18 +3,12 @@ pragma solidity >=0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ENS.sol";
 
-
-error UnexpiredCommitmentExists(address owner);
-error InsufficientValue(uint value);
-
 /**
  * A registrar that allocates subdomains to the first person to claim them.
  */
 contract MyNewRegistrar is Ownable{
     ENS ens;
     bytes32 rootNode;
-
-    mapping(address => uint256) public commitments;
     address public relayer;
 
     modifier only_owner(bytes32 label) {
@@ -42,27 +36,8 @@ contract MyNewRegistrar is Ownable{
      * @param owner The address of the new owner.
      */
     function register(bytes32 label, address owner) public payable only_owner(label) {
-        if (commitments[owner] > block.timestamp) {
-            revert UnexpiredCommitmentExists(owner);
-        }
-        if (msg.sender == relayer) {
-            ens.setSubnodeOwner(rootNode, label, owner);
-        }
-        else if (msg.value == 0) {
-            revert InsufficientValue(msg.value);
-        }
-        else {
-            ens.setSubnodeOwner(rootNode, label, owner);
-        }
-        
-    }
-
-    /**
-     * Commit an owner to allow a registration (MEV mitigator)
-     * @param owner The address of the new owner.
-     */
-    function commit(address owner) public {
-        commitments[owner] = block.timestamp;
+        require(msg.sender == relayer || msg.value > 0, "Requirements do not match");
+        ens.setSubnodeOwner(rootNode, label, owner);  
     }
 
     /**
