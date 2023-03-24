@@ -8,9 +8,6 @@ import {
 import type { AppProps } from "next/app";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
-  arbitrum,
-  goerli,
-  mainnet,
   optimism,
   arbitrumGoerli,
   optimismGoerli,
@@ -22,15 +19,7 @@ import Layout from "../components/Layout";
 
 // When going live / demo, let only networks where contracts were deployed
 const { chains, provider, webSocketProvider } = configureChains(
-  [
-    optimismGoerli,
-    optimism,
-    arbitrum,
-    arbitrumGoerli,
-    zkSyncTestnet,
-    scrollTestnet,
-    polygonZkTestnet,
-  ],
+  [optimismGoerli, optimism, arbitrumGoerli, scrollTestnet, polygonZkTestnet],
   [publicProvider()]
 );
 
