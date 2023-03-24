@@ -61,7 +61,7 @@ def execute_register_transaction(label,address, blockchain):
     abi_path = os.path.join('ABIs',  'Registrar_ABI.json')
     with open(abi_path, 'r') as f:
         abi = json.load(f)
-    if blockchain=='GNOSIS':
+    if blockchain == 'GNOSIS':
         contract = w3.eth.contract(address=os.getenv('REGISTRAR_CONTRACT_ADDRESS_GNOSIS'), abi=abi)
     else:
         contract = w3.eth.contract(address=os.getenv('REGISTRAR_CONTRACT_ADDRESS'), abi=abi)
@@ -70,10 +70,10 @@ def execute_register_transaction(label,address, blockchain):
     #set gas for
     if blockchain == "ARBITRUM":
         transaction_details["gasPrice"] = 150000000
-        transaction_details["gas"] = 1000000000
-    if blockchain in ["SCROLL", "ZK_EVM"]:
-        transaction_details["gasPrice"] = 1500000000
-        transaction_details["gas"] = 100000
+        transaction_details["gas"] = 10000000
+    if blockchain in ["GNOSIS","SCROLL", "ZK_EVM"]:
+        transaction_details["gasPrice"] = 15000000000
+        transaction_details["gas"] = 1000000
     transaction = contract.functions.register(label,address).build_transaction(
         transaction_details)
     signed_txn = w3.eth.account.sign_transaction(transaction, os.getenv('RELAYER_PRIVATE_KEY'))

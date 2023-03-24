@@ -15,7 +15,7 @@ def send():
     parameters = get_request_parameters()
     # Get the transaction result
     label, address=parameters.values()
-    blockchains = ['GNOSIS', "SCROLL", "ARBITRUM", 'ZK_EVM']
+    blockchains = ["GNOSIS", "SCROLL", "ARBITRUM", 'ZK_EVM']
     receipts = []
     for blockchain in blockchains:
         print(blockchain)
