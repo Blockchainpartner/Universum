@@ -26,7 +26,5 @@ export const POLYGONZK_REGISTRAR_ADDRESS =
   "0xC41C1811651Ac553DBDFD3f7430F3775Fa0c77b2";
 
 //contract addresses are the same on all blockchains
-//ENSRegistry= 0x332EAD518F1bF202b9ECf6254aC572c107c037B9 optimism mainnet
-//MyNewRegistrar = 0xc847d2f85A0b0c39E574d597098fb6584D2C9F4A
-export const ENSRegistry = "0xc61ba42D6315A019B01727defd9c441bb650345b";
-export const MyNewRegistrar = "0xaCA26Db592d626b75a6E8132b202C29EFa9Ee812";
+export const ENSRegistry = "0xc847d2f85A0b0c39E574d597098fb6584D2C9F4A";
+export const MyNewRegistrar = "0x332EAD518F1bF202b9ECf6254aC572c107c037B9";
