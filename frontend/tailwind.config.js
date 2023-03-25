@@ -13,7 +13,7 @@ module.exports = {
         wave: {
           '0%': { transform: 'translateY(0)' },
          
-          '50%': { transform: 'translateY(-20px)' },
+          '50%': { transform: 'translateY(-25px)' },
           
           '100%': { transform: 'translateY(0)' },
         },

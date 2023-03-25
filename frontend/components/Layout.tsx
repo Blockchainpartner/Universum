@@ -1,33 +1,22 @@
 import React, { PropsWithChildren } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import headerImg from "../assets/astro.svg";
-import Image from "next/image";
-
 import "animate.css";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { SnackbarProvider } from "notistack";
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="h-screen bg-hero">
-      <div className="flex justify-end p-4">
-        <ConnectButton />
+    <SnackbarProvider
+      maxSnack={1}
+      autoHideDuration={2500}
+      anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+    >
+      <div className="h-screen bg-hero">
+        <Navbar />
+        {children}
+        <Footer />
       </div>
-
-      {children}
-      <div className="-translate-y-1/3">
-        <div className={"  flex justify-end animate-waving-hand   "}>
-          <Image
-            className={""}
-            src={headerImg}
-            alt="Header Img"
-            width={300}
-            height={300}
-          />
-        </div>
-      </div>
-      <p className="absolute bottom-0 text-center text-white w-full">
-        Made with ❤️ by your frens at Blockchain Partner
-      </p>
-    </div>
+    </SnackbarProvider>
   );
 };
 export default Layout;

@@ -1,7 +1,7 @@
 // import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from "next";
 import Head from "next/head";
-import RegistrationCard from "../components/RegistrationCard";
+import ProjectSection from "../components/ProjectSection";
 
 const Home: NextPage = () => {
   return (
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         ></link>
       </Head>
 
-      <RegistrationCard />
+      <ProjectSection />
     </div>
   );
 };

@@ -13,3 +13,5 @@ import '@ensdomains/ens-contracts/contracts/ethregistrar/ETHRegistrarController.
 //Resolvers 
 import "@ensdomains/ens-contracts/contracts/resolvers/PublicResolver.sol";
 
+// Ownable
+import "@openzeppelin/contracts/access/Ownable.sol";
