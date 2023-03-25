@@ -32,16 +32,13 @@ async function signTypedData2(signer: any, from: string, data: any) {
   const [method, argData] = isHardhat
     ? ["eth_signTypedData", data]
     : ["eth_signTypedData_v4", JSON.stringify(data)];
-  console.log("method :", method);
-  console.log("argData", argData);
-  console.log("data :", data);
+
   //return await signer.send(method, [from, argData]);
   const signature = await signTypedData({
     domain: data.domain,
     types: data.types,
     value: data.message,
   });
-  console.log("signature :", signature);
   return signature;
 }
 

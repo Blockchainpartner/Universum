@@ -45,7 +45,6 @@ async function sendMetaTx(
 export async function sendMetaTx2(name: string) {
   const ethersProvider = getProvider();
   const userNetwork = await ethersProvider.getNetwork();
-  console.log(userNetwork);
   const envChainId = parseInt(process.env.NEXT_PUBLIC_CHAINID || "");
   const chainId = Number.isInteger(envChainId) ? envChainId : 137;
   const url =
