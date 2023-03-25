@@ -28,3 +28,4 @@ export const POLYGONZK_REGISTRAR_ADDRESS =
 //contract addresses are the same on all blockchains
 export const ENSRegistry = "0xc847d2f85A0b0c39E574d597098fb6584D2C9F4A";
 export const MyNewRegistrar = "0x332EAD518F1bF202b9ECf6254aC572c107c037B9";
+export const ENSRegistrytestnet = "0xc61ba42D6315A019B01727defd9c441bb650345b";
